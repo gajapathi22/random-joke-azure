@@ -12,44 +12,30 @@ stages:
     steps:
       - checkout: self
 
-      # Debug: Show exact directory structure
-      - script: |
-          echo "Current working directory: $(pwd)"
-          echo "Directory contents:"
-          ls -la
-          echo "rja-backend contents:"
-          ls -la rja-backend/
-        displayName: Debug - Show Directory Structure
-
-      # Build backend with absolute paths
+      # Build backend
       - script: |
           echo "Building backend Docker image..."
-          echo "Using Dockerfile at: $(Build.SourcesDirectory)/rja-backend/Dockerfile"
-          docker build \
-            -t joke-backend:latest \
-            -f $(Build.SourcesDirectory)/rja-backend/Dockerfile \
-            $(Build.SourcesDirectory)/rja-backend
+          cd rja-backend
+          docker build -t joke-backend:latest .
         displayName: Build Backend Docker Image
 
-      # Build frontend with absolute paths
+      # Build frontend
       - script: |
           echo "Building frontend Docker image..."
-          docker build \
-            -t joke-frontend:latest \
-            -f $(Build.SourcesDirectory)/rja-frontend/Dockerfile \
-            $(Build.SourcesDirectory)/rja-frontend
+          cd rja-frontend
+          docker build -t joke-frontend:latest .
         displayName: Build Frontend Docker Image
 
       # Deploy backend
       - script: |
           echo "Deploying backend to Kubernetes..."
-          kubectl apply -f $(Build.SourcesDirectory)/k8s/backend-deployment.yaml
-          kubectl apply -f $(Build.SourcesDirectory)/k8s/backend-service.yaml
+          kubectl apply -f k8s/backend-deployment.yaml
+          kubectl apply -f k8s/backend-service.yaml
         displayName: Deploy Backend
 
       # Deploy frontend
       - script: |
           echo "Deploying frontend to Kubernetes..."
-          kubectl apply -f $(Build.SourcesDirectory)/k8s/frontend-deployment.yaml
-          kubectl apply -f $(Build.SourcesDirectory)/k8s/frontend-service.yaml
+          kubectl apply -f k8s/frontend-deployment.yaml
+          kubectl apply -f k8s/frontend-service.yaml
         displayName: Deploy Frontend
