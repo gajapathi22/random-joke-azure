@@ -4,36 +4,47 @@ trigger:
 pool:
   name: Local-Machine-Agents
 
+variables:
+  DOCKER_HUB_USERNAME: gajapathi22
+
 stages:
 - stage: BuildAndDeploy
   jobs:
   - job: BuildPushDeploy
-    displayName: Build Docker images and deploy to Kubernetes
+    displayName: Build, Push to Docker Hub, and Deploy to Kubernetes
     steps:
       - checkout: self
 
-      # Build backend
+      # Log in to Docker Hub
       - script: |
-          echo "Building backend Docker image..."
+          echo "Logging into Docker Hub..."
+          echo "$(DOCKER_PASSWORD)" | docker login -u "$(DOCKER_USERNAME)" --password-stdin
+        displayName: Docker Hub Login
+
+      # Build and push backend
+      - script: |
+          echo "Building and pushing backend Docker image..."
           cd rja-backend
-          docker build -t joke-backend:latest .
-        displayName: Build Backend Docker Image
+          docker build -t $(DOCKER_HUB_USERNAME)/joke-backend:latest .
+          docker push $(DOCKER_HUB_USERNAME)/joke-backend:latest
+        displayName: Build and Push Backend
 
-      # Build frontend
+      # Build and push frontend
       - script: |
-          echo "Building frontend Docker image..."
+          echo "Building and pushing frontend Docker image..."
           cd rja-frontend
-          docker build -t joke-frontend:latest .
-        displayName: Build Frontend Docker Image
+          docker build -t $(DOCKER_HUB_USERNAME)/joke-frontend:latest .
+          docker push $(DOCKER_HUB_USERNAME)/joke-frontend:latest
+        displayName: Build and Push Frontend
 
-      # Deploy backend
+      # Deploy backend to Kubernetes
       - script: |
           echo "Deploying backend to Kubernetes..."
           kubectl apply -f k8s/backend-deployment.yaml
           kubectl apply -f k8s/backend-service.yaml
         displayName: Deploy Backend
 
-      # Deploy frontend
+      # Deploy frontend to Kubernetes
       - script: |
           echo "Deploying frontend to Kubernetes..."
           kubectl apply -f k8s/frontend-deployment.yaml
