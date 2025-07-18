@@ -11,30 +11,25 @@ stages:
     displayName: Build Docker images and deploy to Kubernetes
     steps:
       - checkout: self
-      
-      # First verify the directory structure
-      - script: ls -R
-        displayName: Verify Directory Structure
 
-      # Then build with the correct paths
       - script: |
           echo "Building backend Docker image..."
-          docker build -t joke-backend:latest -f ./random-joke-azure/rja-backend/Dockerfile ./random-joke-azure/rja-backend
+          docker build -t joke-backend:latest -f ./rja-backend/Dockerfile ./rja-backend
         displayName: Build Backend Docker Image
 
       - script: |
           echo "Building frontend Docker image..."
-          docker build -t joke-frontend:latest -f ./random-joke-azure/rja-frontend/Dockerfile ./random-joke-azure/rja-frontend
+          docker build -t joke-frontend:latest -f ./rja-frontend/Dockerfile ./rja-frontend
         displayName: Build Frontend Docker Image
 
       - script: |
           echo "Deploying backend to Kubernetes..."
-          kubectl apply -f ./random-joke-azure/k8s/backend-deployment.yaml
-          kubectl apply -f ./random-joke-azure/k8s/backend-service.yaml
+          kubectl apply -f ./k8s/backend-deployment.yaml
+          kubectl apply -f ./k8s/backend-service.yaml
         displayName: Deploy Backend
 
       - script: |
           echo "Deploying frontend to Kubernetes..."
-          kubectl apply -f ./random-joke-azure/k8s/frontend-deployment.yaml
-          kubectl apply -f ./random-joke-azure/k8s/frontend-service.yaml
+          kubectl apply -f ./k8s/frontend-deployment.yaml
+          kubectl apply -f ./k8s/frontend-service.yaml
         displayName: Deploy Frontend
