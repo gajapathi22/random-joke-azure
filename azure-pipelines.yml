@@ -50,9 +50,9 @@ stages:
           kubectl apply -f k8s/frontend-service.yaml
         displayName: Deploy Frontend to Kubernetes
 
-      - name: Restart Frontend Deployment
-        run: kubectl rollout restart deployment joke-frontend
+      - script: kubectl rollout restart deployment joke-frontend
+        displayName: Restart Frontend Deployment
 
-      - name: Restart Backend Deployment
-        run: kubectl rollout restart deployment joke-backend
+      - script: kubectl rollout restart deployment joke-backend
+        displayName: Restart Backend Deployment
 
