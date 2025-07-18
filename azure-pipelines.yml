@@ -4,9 +4,6 @@ trigger:
 pool:
   name: Local-Machine-Agents
 
-variables:
-  DOCKER_HUB_USERNAME: gajapathi22
-
 stages:
 - stage: BuildAndDeploy
   jobs:
@@ -15,9 +12,8 @@ stages:
     steps:
       - checkout: self
 
-      # Log in to Docker Hub
+      # Docker login
       - script: |
-          echo "Logging into Docker Hub..."
           echo "$(DOCKER_PASSWORD)" | docker login -u "$(DOCKER_USERNAME)" --password-stdin
         displayName: Docker Hub Login
 
@@ -25,28 +21,28 @@ stages:
       - script: |
           echo "Building and pushing backend Docker image..."
           cd rja-backend
-          docker build -t $(DOCKER_HUB_USERNAME)/joke-backend:latest .
-          docker push $(DOCKER_HUB_USERNAME)/joke-backend:latest
-        displayName: Build and Push Backend
+          docker build -t $(DOCKER_USERNAME)/joke-backend:latest .
+          docker push $(DOCKER_USERNAME)/joke-backend:latest
+        displayName: Build and Push Backend Image
 
       # Build and push frontend
       - script: |
           echo "Building and pushing frontend Docker image..."
           cd rja-frontend
-          docker build -t $(DOCKER_HUB_USERNAME)/joke-frontend:latest .
-          docker push $(DOCKER_HUB_USERNAME)/joke-frontend:latest
-        displayName: Build and Push Frontend
+          docker build -t $(DOCKER_USERNAME)/joke-frontend:latest .
+          docker push $(DOCKER_USERNAME)/joke-frontend:latest
+        displayName: Build and Push Frontend Image
 
-      # Deploy backend to Kubernetes
+      # Deploy backend
       - script: |
           echo "Deploying backend to Kubernetes..."
           kubectl apply -f k8s/backend-deployment.yaml
           kubectl apply -f k8s/backend-service.yaml
-        displayName: Deploy Backend
+        displayName: Deploy Backend to Kubernetes
 
-      # Deploy frontend to Kubernetes
+      # Deploy frontend
       - script: |
           echo "Deploying frontend to Kubernetes..."
           kubectl apply -f k8s/frontend-deployment.yaml
           kubectl apply -f k8s/frontend-service.yaml
-        displayName: Deploy Frontend
+        displayName: Deploy Frontend to Kubernetes
