@@ -1,0 +1,113 @@
+/* Modern Gradient Background */
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+}
+
+.app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.joke-container {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  margin: 2rem 0;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.joke-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.joke-text {
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
+.joke-button {
+  background: #fff;
+  color: #667eea;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-top: 1rem;
+}
+
+.joke-button:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0,0,0,0.1);
+}
+
+.joke-button:active {
+  transform: translateY(0);
+}
+
+.loading {
+  font-style: italic;
+  color: rgba(255,255,255,0.8);
+}
+
+.error {
+  color: #ff6b6b;
+  background: rgba(255,255,255,0.9);
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+}
+
+/* Add animation for new jokes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.joke-text {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.joke-button span[role="img"] {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.joke-button:hover span[role="img"] {
+  transform: rotate(15deg) scale(1.2);
+}
+
+.counter {
+  font-size: 0.8em;
+  opacity: 0.7;
+  margin-left: 5px;
+}
