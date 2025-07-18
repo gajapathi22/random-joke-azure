@@ -14,12 +14,12 @@ stages:
 
       - script: |
           echo "Building backend Docker image..."
-          docker build -t joke-backend:latest ./rja-backend
+          docker build -f rja-backend/Dockerfile -t joke-backend:latest .
         displayName: Build Backend Docker Image
 
       - script: |
           echo "Building frontend Docker image..."
-          docker build -t joke-frontend:latest ./rja-frontend
+          docker build -f rja-frontend/Dockerfile -t joke-frontend:latest .
         displayName: Build Frontend Docker Image
 
       - script: |
