@@ -2,7 +2,7 @@ trigger:
   - master
 
 pool:
-  name: Default  # Local agent pool
+  name: Local-Machine-Agents  # Local agent pool
 
 variables:
   FRONTEND_IMAGE: joke-frontend:latest
