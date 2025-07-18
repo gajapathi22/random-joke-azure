@@ -32,7 +32,7 @@ function App() {
 
     <div className="app">
         <div className="project-header">
-        <h2>Typeface Assignment Project testing code</h2>
+        <h2>Typeface Assignment Project testing codeee</h2>
         <p className="subtitle">Exploring humor through typography</p>
         </div>
         
