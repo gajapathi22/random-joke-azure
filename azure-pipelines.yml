@@ -11,12 +11,12 @@ variables:
 steps:
 - script: |
     echo "Starting Docker build for frontend..."
-    docker build -t $(FRONTEND_IMAGE) ./frontend
+    docker build -t $(FRONTEND_IMAGE) ./rja-frontend
   displayName: 'Build Frontend Docker Image'
 
 - script: |
     echo "Starting Docker build for backend..."
-    docker build -t $(BACKEND_IMAGE) ./backend
+    docker build -t $(BACKEND_IMAGE) ./rja-backend
   displayName: 'Build Backend Docker Image'
 
 - script: |
