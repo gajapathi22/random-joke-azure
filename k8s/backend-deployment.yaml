@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name : joke-backend
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+          app: joke-backend
+   template:
+      metadata:
+        labels:
+           app: joke-backend
+      spec:
+         containers:
+            - name: backend
+              image: joke-backend:latest
+              imagePullPolicy: IfNotPresent
+              ports:
+                - containerPort: 3001
