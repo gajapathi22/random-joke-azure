@@ -4,6 +4,9 @@ trigger:
 pool:
   name: Local-Machine-Agents
 
+variables:
+  BUILD_CONTEXT: $(System.DefaultWorkingDirectory)
+
 stages:
 - stage: BuildAndDeploy
   jobs:
@@ -12,22 +15,33 @@ stages:
     steps:
       - checkout: self
 
+      # Debug: Show directory structure
+      - script: ls -laR
+        displayName: Show directory structure
+
+      # Build backend
       - script: |
           echo "Building backend Docker image..."
+          echo "Current directory: $(pwd)"
+          echo "Dockerfile path: $(pwd)/rja-backend/Dockerfile"
           docker build -t joke-backend:latest -f ./rja-backend/Dockerfile ./rja-backend
         displayName: Build Backend Docker Image
+        failOnStderr: true
 
+      # Build frontend
       - script: |
           echo "Building frontend Docker image..."
           docker build -t joke-frontend:latest -f ./rja-frontend/Dockerfile ./rja-frontend
         displayName: Build Frontend Docker Image
 
+      # Deploy backend
       - script: |
           echo "Deploying backend to Kubernetes..."
           kubectl apply -f ./k8s/backend-deployment.yaml
           kubectl apply -f ./k8s/backend-service.yaml
         displayName: Deploy Backend
 
+      # Deploy frontend
       - script: |
           echo "Deploying frontend to Kubernetes..."
           kubectl apply -f ./k8s/frontend-deployment.yaml
