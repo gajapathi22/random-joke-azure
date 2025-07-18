@@ -12,7 +12,7 @@ function App() {
     setError(null);
     
     try {
-      const response = await fetch('http://backend-service:3001/api/joke');
+      const response = await fetch('http://joke-backend-service:3001/api/joke');
       if (!response.ok) throw new Error('Failed to fetch joke');
       const data = await response.json();
       setJoke(data.joke);
