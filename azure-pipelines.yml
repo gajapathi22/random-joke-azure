@@ -1,0 +1,42 @@
+trigger:
+  - master
+
+pool:
+  name: Default  # Local agent pool
+
+variables:
+  FRONTEND_IMAGE: joke-frontend:latest
+  BACKEND_IMAGE: joke-backend:latest
+
+steps:
+- script: |
+    echo "Starting Docker build for frontend..."
+    docker build -t $(FRONTEND_IMAGE) ./frontend
+  displayName: 'Build Frontend Docker Image'
+
+- script: |
+    echo "Starting Docker build for backend..."
+    docker build -t $(BACKEND_IMAGE) ./backend
+  displayName: 'Build Backend Docker Image'
+
+- script: |
+    echo "Loading frontend image into Minikube..."
+    minikube image load $(FRONTEND_IMAGE)
+  displayName: 'Load Frontend Image into Minikube'
+
+- script: |
+    echo "Loading backend image into Minikube..."
+    minikube image load $(BACKEND_IMAGE)
+  displayName: 'Load Backend Image into Minikube'
+
+- script: |
+    echo "Deploying frontend to Kubernetes..."
+    kubectl apply -f k8s/frontend-deployment.yaml
+    kubectl apply -f k8s/frontend-service.yaml
+  displayName: 'Deploy Frontend'
+
+- script: |
+    echo "Deploying backend to Kubernetes..."
+    kubectl apply -f k8s/backend-deployment.yaml
+    kubectl apply -f k8s/backend-service.yaml
+  displayName: 'Deploy Backend'
