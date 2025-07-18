@@ -7,49 +7,28 @@ pool:
 stages:
 - stage: BuildAndDeploy
   jobs:
-  - job: BuildPushDeploy
-    displayName: Build Docker images and deploy to Kubernetes
+  - job: Build
+    steps:
+      - checkout: self  # Simple checkout now
+      
+      - script: |
+          echo "Building Backend..."
+          docker build -t joke-backend -f rja-backend/Dockerfile rja-backend
+        displayName: Build Backend
+
+      - script: |
+          echo "Building Frontend..."
+          docker build -t joke-frontend -f rja-frontend/Dockerfile rja-frontend
+        displayName: Build Frontend
+
+  - job: Deploy
+    dependsOn: Build
     steps:
       - checkout: self
-
-      # Debug: Show exact directory structure
+      
       - script: |
-          echo "Current working directory: $(pwd)"
-          echo "Directory contents:"
-          ls -la
-          echo "rja-backend contents:"
-          ls -la rja-backend/
-        displayName: Debug - Show Directory Structure
-
-      # Build backend with absolute paths
-      - script: |
-          echo "Building backend Docker image..."
-          echo "Using Dockerfile at: $(Build.SourcesDirectory)/rja-backend/Dockerfile"
-          docker build \
-            -t joke-backend:latest \
-            -f $(Build.SourcesDirectory)/rja-backend/Dockerfile \
-            $(Build.SourcesDirectory)/rja-backend
-        displayName: Build Backend Docker Image
-
-      # Build frontend with absolute paths
-      - script: |
-          echo "Building frontend Docker image..."
-          docker build \
-            -t joke-frontend:latest \
-            -f $(Build.SourcesDirectory)/rja-frontend/Dockerfile \
-            $(Build.SourcesDirectory)/rja-frontend
-        displayName: Build Frontend Docker Image
-
-      # Deploy backend
-      - script: |
-          echo "Deploying backend to Kubernetes..."
-          kubectl apply -f $(Build.SourcesDirectory)/k8s/backend-deployment.yaml
-          kubectl apply -f $(Build.SourcesDirectory)/k8s/backend-service.yaml
-        displayName: Deploy Backend
-
-      # Deploy frontend
-      - script: |
-          echo "Deploying frontend to Kubernetes..."
-          kubectl apply -f $(Build.SourcesDirectory)/k8s/frontend-deployment.yaml
-          kubectl apply -f $(Build.SourcesDirectory)/k8s/frontend-service.yaml
-        displayName: Deploy Frontend
+          kubectl apply -f k8s/backend-deployment.yaml
+          kubectl apply -f k8s/backend-service.yaml
+          kubectl apply -f k8s/frontend-deployment.yaml
+          kubectl apply -f k8s/frontend-service.yaml
+        displayName: Deploy to Kubernetes
