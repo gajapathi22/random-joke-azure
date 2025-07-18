@@ -4,39 +4,32 @@ trigger:
 pool:
   name: Local-Machine-Agents  # Local agent pool
 
-variables:
-  FRONTEND_IMAGE: joke-frontend:latest
-  BACKEND_IMAGE: joke-backend:latest
+stages:
+- stage: BuildAndDeploy
+  jobs:
+  - job: BuildPushDeploy
+    displayName: Build Docker images and deploy to Kubernetes
+    steps:
 
-steps:
-- script: |
-    echo "Starting Docker build for frontend..."
-    docker build -t $(FRONTEND_IMAGE) ./rja-frontend
-  displayName: 'Build Frontend Docker Image'
+    - script: |
+        echo "Building backend Docker image..."
+        docker build -t joke-backend:latest ./rja-backend
+      displayName: Build Backend Docker Image
 
-- script: |
-    echo "Starting Docker build for backend..."
-    docker build -t $(BACKEND_IMAGE) ./rja-backend
-  displayName: 'Build Backend Docker Image'
+    - script: |
+        echo "Building frontend Docker image..."
+        docker build -t joke-frontend:latest ./rja-frontend
+      displayName: Build Frontend Docker Image
 
-- script: |
-    echo "Loading frontend image into Minikube..."
-    minikube image load $(FRONTEND_IMAGE)
-  displayName: 'Load Frontend Image into Minikube'
+    - script: |
+        echo "Deploying backend to Kubernetes..."
+        kubectl apply -f ./k8s/backend-deployment.yaml
+        kubectl apply -f ./k8s/backend-service.yaml
+      displayName: Deploy Backend
 
-- script: |
-    echo "Loading backend image into Minikube..."
-    minikube image load $(BACKEND_IMAGE)
-  displayName: 'Load Backend Image into Minikube'
+    - script: |
+        echo "Deploying frontend to Kubernetes..."
+        kubectl apply -f ./k8s/frontend-deployment.yaml
+        kubectl apply -f ./k8s/frontend-service.yaml
+      displayName: Deploy Frontend
 
-- script: |
-    echo "Deploying frontend to Kubernetes..."
-    kubectl apply -f k8s/frontend-deployment.yaml
-    kubectl apply -f k8s/frontend-service.yaml
-  displayName: 'Deploy Frontend'
-
-- script: |
-    echo "Deploying backend to Kubernetes..."
-    kubectl apply -f k8s/backend-deployment.yaml
-    kubectl apply -f k8s/backend-service.yaml
-  displayName: 'Deploy Backend'
