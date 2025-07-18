@@ -4,6 +4,9 @@ trigger:
 pool:
   name: Local-Machine-Agents
 
+variables:
+- group: random-joke-azure
+
 stages:
 - stage: BuildAndDeploy
   jobs:
