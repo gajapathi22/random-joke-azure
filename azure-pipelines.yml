@@ -4,6 +4,9 @@ trigger:
 pool:
   name: Local-Machine-Agents  # Local agent pool
 
+steps:
+  - checkout: self
+  
 stages:
 - stage: BuildAndDeploy
   jobs:
