@@ -1,20 +1,61 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# 🤣 Random Joke App with Azure DevOps + Minikube + Docker Hub
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+This is a full-stack web application that serves random jokes using a backend API and a frontend UI.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+---
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+## 🗂️ Project Structure
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+random-joke-azure/
+├── k8s/ # Kubernetes manifests
+│ ├── backend-deployment.yaml
+│ ├── backend-service.yaml
+│ ├── frontend-deployment.yaml
+│ └── frontend-service.yaml
+├── rja-backend/ # Node.js backend API
+│ ├── Dockerfile
+│ └── server.js
+├── rja-frontend/ # React frontend
+│ ├── Dockerfile
+│ └── src/App.js
+├── azure-pipelines.yml # Azure DevOps pipeline file
+└── README.md # You are here
+
+
+---
+
+## 🚀 Features
+
+- Full-stack app using Node.js + React
+- Containerized with Docker
+- CI/CD pipeline using Azure DevOps
+- Docker images pushed to Docker Hub
+- Deployed to Minikube (locally running Kubernetes) from a **self-hosted Azure agent**
+
+---
+
+## ⚙️ Prerequisites
+
+- Docker Hub account (with a **repository created** for frontend and backend)
+- Minikube running locally
+- Azure DevOps project and pipeline
+- Self-hosted agent configured to run on the local machine with `kubectl` and `docker` access
+
+---
+
+## 🧪 Run Locally (Optional)
+
+If you want to test locally without Azure:
+
+```bash
+# Start minikube
+minikube start
+
+# Build images locally
+cd rja-backend && docker build -t joke-backend:latest .
+cd ../rja-frontend && docker build -t joke-frontend:latest .
+
+# Apply manifests
+kubectl apply -f k8s/
+
+
