@@ -49,7 +49,7 @@ random-joke-azure/
 
 ---
 
-## Run Locally (Optional)
+## Run Locally 
 If you want to test locally without Azure:
 
 ```bash
