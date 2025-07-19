@@ -1,4 +1,4 @@
-# 🤣 Random Joke App with Azure DevOps + Minikube + Docker Hub
+#  Random Joke App with Azure DevOps + Minikube + Docker Hub
 
 This is a full-stack web application that serves random jokes using a backend API and a frontend UI.
 
