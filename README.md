@@ -4,6 +4,12 @@ This is a full-stack web application that serves random jokes using a backend AP
 
 ---
 
+## 📸 Screenshot
+
+![App Screenshot](images/rja-pic.png)
+
+---
+
 ## Project Structure
 
 random-joke-azure/
@@ -84,3 +90,5 @@ Each file in the `k8s/` directory is responsible for deploying and exposing your
 Once the Azure pipeline completes successfully, you can view your app using:
 
 minikube service joke-frontend-service
+
+
