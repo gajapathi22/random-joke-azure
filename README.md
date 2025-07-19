@@ -4,7 +4,7 @@ This is a full-stack web application that serves random jokes using a backend AP
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 random-joke-azure/
 ├── k8s/ # Kubernetes manifests
@@ -24,7 +24,7 @@ random-joke-azure/
 
 ---
 
-## 🚀 Features
+## Features
 
 - Full-stack app using Node.js + React
 - Containerized with Docker
@@ -34,7 +34,7 @@ random-joke-azure/
 
 ---
 
-## ⚙️ Prerequisites
+##  Prerequisites
 
 - Docker Hub account (with a **repository created** for frontend and backend)
 - Minikube running locally
@@ -43,8 +43,7 @@ random-joke-azure/
 
 ---
 
-## 🧪 Run Locally (Optional)
-
+## Run Locally (Optional)
 If you want to test locally without Azure:
 
 ```bash
@@ -58,4 +57,31 @@ cd ../rja-frontend && docker build -t joke-frontend:latest .
 # Apply manifests
 kubectl apply -f k8s/
 
+# Azure DevOps CI/CD with Minikube and Docker
 
+This project sets up a complete CI/CD pipeline using Azure DevOps, Docker, and Minikube for deploying a frontend and backend application to a local Kubernetes cluster.
+
+## 📁 Azure Pipeline File
+
+See `azure-pipelines.yml` for the complete CI/CD configuration.
+
+### Prerequisites for Azure DevOps Agent
+
+Make sure your self-hosted Azure DevOps agent (running locally) has:
+
+- `kubectl` configured with access to **Minikube**
+- `docker` installed and logged in to **Docker Hub**
+
+## 📦 Kubernetes Manifest Notes
+
+Each file in the `k8s/` directory is responsible for deploying and exposing your app:
+
+- `*-deployment.yaml`: Defines the deployment using your Docker image.
+- `*-service.yaml`: Exposes the service via **NodePort** for Minikube access.
+
+## 🌐 Accessing the App
+
+Once the Azure pipeline completes successfully, you can view your app using:
+
+```bash
+minikube service joke-frontend-service
